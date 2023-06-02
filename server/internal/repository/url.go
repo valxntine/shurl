@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"log"
 )
 
@@ -26,7 +25,6 @@ func (r *repository) Create(ctx context.Context, original string, short string) 
 
 	_, err = tx.Exec(addUrl, original, short)
 	if err != nil {
-		fmt.Println("we got an error yo")
 		return err
 	}
 

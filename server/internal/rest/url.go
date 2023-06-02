@@ -2,7 +2,6 @@ package rest
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -42,7 +41,6 @@ func (h *Handlers) CreateShortUrl(w http.ResponseWriter, r *http.Request) {
 // If no long url exists we return a 5xx error.
 func (h *Handlers) GetOriginalUrl(w http.ResponseWriter, r *http.Request) {
 	p := chi.URLParam(r, "url")
-	fmt.Printf("SHORT FROM PARAM: %s", p)
 
 	original, err := h.Services.OriginalUrlGetter.GetOriginalUrl(r.Context(), p)
 	if err != nil {

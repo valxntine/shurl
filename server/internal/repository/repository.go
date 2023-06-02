@@ -2,7 +2,6 @@ package repository
 
 import (
 	"database/sql"
-	"fmt"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -23,13 +22,11 @@ const createTable = `
 func NewRepository() (*repository, error) {
 	conn, err := sql.Open("sqlite3", "urls.db")
 	if err != nil {
-		fmt.Println(fmt.Errorf("shit the bed in the constructor %w", err))
-		panic(err)
+    return nil, err
 	}
 
 	_, err = conn.Exec(createTable)
 	if err != nil {
-		fmt.Println("shit the bed creating table")
 		return nil, err
 	}
 
