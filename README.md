@@ -1,4 +1,4 @@
-# Cronofy URL Shortener Project
+# URL Shortener Project
 
 ## Requirements
 
