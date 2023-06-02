@@ -1,0 +1,33 @@
+version: '3.6'
+
+services:
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.api
+    environment:
+        PORT: "3002"
+    ports:
+      - 3002:3002
+    command: ["reflex", "-sr", ".go", "--", "sh", "-c", "go run server/main.go"]
+    volumes:
+      - .:/usr/src/server/app
+    networks:
+      - shurl
+
+  client: 
+    build:
+      context: ./client
+      dockerfile: Dockerfile.client
+    ports:
+      - 4242:4242 
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+    command: ["npm", "run", "dev"]
+    networks:
+      - shurl
+
+networks:
+  shurl:
+    driver: bridge
