@@ -1,0 +1,28 @@
+FROM golang:1.19-alpine as base
+
+WORKDIR /usr/src/server/app
+
+RUN apk add --no-cache gcc libc-dev \
+  && go install github.com/cespare/reflex@latest
+
+ENV GO111MODULE=on
+ENV XDG_CACHE_HOME=/tmp/.cache
+
+FROM base as builder
+
+COPY go.mod .
+COPY go.sum . 
+
+# Build and install a static binary, stripping DWARF debugging information and
+# preventing the generation of the Go symbol table.
+RUN go mod download
+COPY . .
+RUN CGO=1 GOOS=linux go install -a -ldflags '-w -s -linkmode external -extldflags "-static"' ./main.go
+
+FROM scratch
+
+# This is set by cloud build
+
+COPY --from=builder /go/bin/main /api
+
+ENTRYPOINT ["/api"]
